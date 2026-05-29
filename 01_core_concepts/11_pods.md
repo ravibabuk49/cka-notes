@@ -72,7 +72,7 @@ NAME    READY   STATUS              RESTARTS   AGE
 nginx   0/1     ContainerCreating   0          3s
 nginx   1/1     Running             0          6s
 ```
-
+> `Ready` column means "Ready containers in pod/Total containers in the pod."
 > `ContainerCreating` means the image is being pulled. `Running` means the container is live.
 
 ---
