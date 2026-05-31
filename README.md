@@ -66,8 +66,8 @@ Every section follows this structure:
 | 11 | Pods | ✅ Done |
 | 12 | Pods with YAML | ✅ Done |
 | 13 | ReplicaSets | ✅ Done |
-| 14 | Deployments | ⬜ Pending |
-| 15 | Services | ⬜ Pending |
+| 14 | Deployments | ✅ Done |
+| 15 | Services | ✅ Done |
 | 16 | Namespaces | ⬜ Pending |
 | 17 | Imperative vs Declarative | ⬜ Pending |
 | 18 | kubectl apply | ⬜ Pending |
