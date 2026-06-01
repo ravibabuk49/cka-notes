@@ -68,7 +68,7 @@ Every section follows this structure:
 | 13 | ReplicaSets | ✅ Done |
 | 14 | Deployments | ✅ Done |
 | 15 | Services | ✅ Done |
-| 16 | Namespaces | ⬜ Pending |
+| 16 | Namespaces | ✅ Done |
 | 17 | Imperative vs Declarative | ⬜ Pending |
 | 18 | kubectl apply | ⬜ Pending |
 
