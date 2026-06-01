@@ -70,7 +70,7 @@ Every section follows this structure:
 | 15 | Services | ✅ Done |
 | 16 | Namespaces | ✅ Done |
 | 17 | Imperative vs Declarative | ✅ Done |
-| 18 | kubectl apply | ⬜ Pending |
+| 18 | kubectl apply | ✅ Done |
 
 ### 02 — Scheduling
 
