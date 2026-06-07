@@ -77,7 +77,7 @@ Every section follows this structure:
 | # | Section | Status |
 |---|---|---|
 | 01 | Manual Scheduling | ✅ Done |
-| 02 | Labels and Selectors | ⬜ Pending |
+| 02 | Labels_Selectors_Annotations | ✅ Done |
 | 03 | Taints and Tolerations | ⬜ Pending |
 | 04 | Node Selectors | ⬜ Pending |
 | 05 | Node Affinity | ⬜ Pending |
