@@ -113,6 +113,7 @@ kubectl apply -f pod.yaml
 
 # List pods
 kubectl get pods
+kubectl get pods --watch (or -w)                # streams real-time lifecycle changes of your Pods.
 kubectl get pods -o wide                        # includes node and IP
 kubectl get pods -n <namespace>                 # specific namespace
 kubectl get pods --all-namespaces               # all namespaces
