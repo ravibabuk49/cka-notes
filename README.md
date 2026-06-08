@@ -80,7 +80,7 @@ Every section follows this structure:
 | 02 | Labels_Selectors_Annotations | ✅ Done |
 | 03 | Taints and Tolerations | ✅ Done |
 | 04 | Node Selectors | ✅ Done |
-| 05 | Node Affinity | ⬜ Pending |
+| 05 | Node Affinity | ✅ Done |
 | 06 | Resource Requirements and Limits | ⬜ Pending |
 | 07 | DaemonSets | ⬜ Pending |
 | 08 | Static Pods | ⬜ Pending |
