@@ -81,10 +81,11 @@ Every section follows this structure:
 | 03 | Taints and Tolerations | ✅ Done |
 | 04 | Node Selectors | ✅ Done |
 | 05 | Node Affinity | ✅ Done |
-| 06 | Resource Requirements and Limits | ⬜ Pending |
-| 07 | DaemonSets | ⬜ Pending |
-| 08 | Static Pods | ⬜ Pending |
-| 09 | Multiple Schedulers | ⬜ Pending |
+| 06 | Taints & Tolerations vs Node Affinity | ⬜ Pending |
+| 07 | Resource Requirements and Limits | ⬜ Pending |
+| 08 | DaemonSets | ⬜ Pending |
+| 09 | Static Pods | ⬜ Pending |
+| 10 | Multiple Schedulers | ⬜ Pending |
 
 ### 03 — Logging & Monitoring
 
