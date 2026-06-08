@@ -81,7 +81,7 @@ Every section follows this structure:
 | 03 | Taints and Tolerations | ✅ Done |
 | 04 | Node Selectors | ✅ Done |
 | 05 | Node Affinity | ✅ Done |
-| 06 | Taints & Tolerations vs Node Affinity | ⬜ Pending |
+| 06 | Taints & Tolerations vs Node Affinity | ✅ Done |
 | 07 | Resource Requirements and Limits | ⬜ Pending |
 | 08 | DaemonSets | ⬜ Pending |
 | 09 | Static Pods | ⬜ Pending |
