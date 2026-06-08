@@ -78,7 +78,7 @@ Every section follows this structure:
 |---|---|---|
 | 01 | Manual Scheduling | ✅ Done |
 | 02 | Labels_Selectors_Annotations | ✅ Done |
-| 03 | Taints and Tolerations | ⬜ Pending |
+| 03 | Taints and Tolerations | ✅ Done |
 | 04 | Node Selectors | ⬜ Pending |
 | 05 | Node Affinity | ⬜ Pending |
 | 06 | Resource Requirements and Limits | ⬜ Pending |
