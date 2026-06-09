@@ -82,7 +82,7 @@ Every section follows this structure:
 | 04 | Node Selectors | ✅ Done |
 | 05 | Node Affinity | ✅ Done |
 | 06 | Taints & Tolerations vs Node Affinity | ✅ Done |
-| 07 | Resource Requirements and Limits | ⬜ Pending |
+| 07 | Resource Requirements and Limits | ✅ Done |
 | 08 | DaemonSets | ⬜ Pending |
 | 09 | Static Pods | ⬜ Pending |
 | 10 | Multiple Schedulers | ⬜ Pending |
