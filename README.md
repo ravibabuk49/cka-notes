@@ -83,9 +83,10 @@ Every section follows this structure:
 | 05 | Node Affinity | ✅ Done |
 | 06 | Taints & Tolerations vs Node Affinity | ✅ Done |
 | 07 | Resource Requirements and Limits | ✅ Done |
-| 08 | DaemonSets | ⬜ Pending |
-| 09 | Static Pods | ⬜ Pending |
-| 10 | Multiple Schedulers | ⬜ Pending |
+| 08 | Editing Pods and Deployments | ⬜ Pending |
+| 09 | DaemonSets | ⬜ Pending |
+| 10 | Static Pods | ⬜ Pending |
+| 11 | Multiple Schedulers | ⬜ Pending |
 
 ### 03 — Logging & Monitoring
 
