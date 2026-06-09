@@ -225,6 +225,56 @@ When a `ResourceQuota` is created, it immediately starts **tracking total consum
 
 ---
 
+### When to Use Which
+
+#### Use `resources.requests` and `resources.limits` when:
+- You know the CPU and memory profile of your application
+- You want to **guarantee** a minimum amount of resources for a specific container
+- You want to **cap** a container from consuming runaway resources (e.g. a memory leak)
+- You are running in a shared cluster where noisy neighbours are a concern
+
+#### Use `LimitRange` when:
+- You want to **enforce a baseline** across all Pods in a namespace without modifying every manifest individually
+- Teams are deploying Pods without any `resources` block and you want safe defaults applied automatically
+- You want to **prevent extreme values** — e.g. no single container should request more than 2 CPUs or less than 50m
+
+> **Real-world example:** A platform team managing a shared dev namespace sets a `LimitRange` so that developers who forget to set resource requests don't accidentally starve the node. Every Pod gets sensible defaults without the platform team reviewing every manifest.
+
+#### Use `ResourceQuota` when:
+- You are running a **multi-team cluster** and need to give each team a fair share of cluster resources
+- You want to **prevent a single namespace from monopolising** CPU or memory across the entire cluster
+- You need to enforce **budget-like constraints** — e.g. the `dev` namespace cannot consume more than 8 CPUs total regardless of how many Pods are running
+
+> **Real-world example:** A platform team gives each product team their own namespace with a `ResourceQuota` of `requests.cpu: 8` and `requests.memory: 16Gi`. This ensures no team can scale out of control and impact other teams running in the same cluster.
+
+#### Use both together when:
+- You want **individual container defaults** (LimitRange) AND **namespace-level total caps** (ResourceQuota) enforced simultaneously — this is the standard production pattern in shared clusters
+
+```
+LimitRange  →  ensures every container has a request set (so ResourceQuota can track it)
+ResourceQuota →  ensures the namespace total never exceeds the allocated share
+```
+
+> **Why both?** `ResourceQuota` only tracks Pods that have requests set. If a Pod has no requests and no `LimitRange` exists to inject defaults, `ResourceQuota` cannot account for it — that Pod flies under the quota radar. Using both together closes this gap.
+
+#### Decision Guide
+
+```
+Do you need to control a single container's resource usage?
+  └── YES → resources.requests / resources.limits in the Pod spec
+
+Do you need to auto-apply defaults across a namespace?
+  └── YES → LimitRange
+
+Do you need to cap total resource consumption across all Pods in a namespace?
+  └── YES → ResourceQuota
+
+Are you running a shared multi-team cluster?
+  └── YES → LimitRange + ResourceQuota together (standard production pattern)
+```
+
+---
+
 ### Exam Gotchas
 
 - **Pod in `Pending` with no node match** — check `kubectl describe pod` for `Insufficient CPU` or `Insufficient memory` events. The scheduler cannot find a node with enough available resources.
