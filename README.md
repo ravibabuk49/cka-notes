@@ -85,7 +85,7 @@ Every section follows this structure:
 | 07 | Resource Requirements and Limits | ✅ Done |
 | 08 | Editing Pods and Deployments | ✅ Done |
 | 09 | DaemonSets | ✅ Done |
-| 10 | Static Pods | ⬜ Pending |
+| 10 | Static Pods | ✅ Done |
 | 11 | Multiple Schedulers | ⬜ Pending |
 
 ### 03 — Logging & Monitoring
