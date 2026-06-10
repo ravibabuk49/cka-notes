@@ -86,7 +86,7 @@ Every section follows this structure:
 | 08 | Editing Pods and Deployments | ✅ Done |
 | 09 | DaemonSets | ✅ Done |
 | 10 | Static Pods | ✅ Done |
-| 11 | Priority Classes | ⬜ Pending |
+| 11 | Priority Classes | ✅ Done |
 | 12 | Multiple Schedulers | ⬜ Pending |
 
 ### 03 — Logging & Monitoring
