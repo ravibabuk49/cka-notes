@@ -87,7 +87,7 @@ Every section follows this structure:
 | 09 | DaemonSets | ✅ Done |
 | 10 | Static Pods | ✅ Done |
 | 11 | Priority Classes | ✅ Done |
-| 12 | Multiple Schedulers | ⬜ Pending |
+| 12 | Multiple Schedulers | ✅ Done |
 
 ### 03 — Logging & Monitoring
 
