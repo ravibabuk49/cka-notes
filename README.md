@@ -88,7 +88,7 @@ Every section follows this structure:
 | 10 | Static Pods | ✅ Done |
 | 11 | Priority Classes | ✅ Done |
 | 12 | Multiple Schedulers | ✅ Done |
-| 13 | Scheduler Profiles | ⬜ Pending |
+| 13 | Scheduler Profiles | ✅ Done |
 | 14 | Admission Controllers | ⬜ Pending |
 | 15 | Validating and Mutating Admission Controllers | ⬜ Pending |
 
