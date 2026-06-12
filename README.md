@@ -89,7 +89,7 @@ Every section follows this structure:
 | 11 | Priority Classes | ✅ Done |
 | 12 | Multiple Schedulers | ✅ Done |
 | 13 | Scheduler Profiles | ✅ Done |
-| 14 | Admission Controllers | ⬜ Pending |
+| 14 | Admission Controllers | ✅ Done |
 | 15 | Validating and Mutating Admission Controllers | ⬜ Pending |
 
 ### 03 — Logging & Monitoring
