@@ -420,3 +420,242 @@ kubectl explain persistentvolume --recursive
 | `ClusterRoleBinding` | `rbac.authorization.k8s.io/v1` |
 | `Role` | `rbac.authorization.k8s.io/v1` |
 | `RoleBinding` | `rbac.authorization.k8s.io/v1` |
+
+---
+
+## 02 — Scheduling
+
+### Manual Scheduling
+
+```bash
+# Check why a pod is Pending (no scheduler / no nodeName)
+kubectl get pods -o wide                        # NODE column shows <none>
+kubectl describe pod <pod-name>                 # check Events for scheduling errors
+
+# Assign existing Pending pod to a node via Binding API
+kubectl proxy --port=8001 &
+curl -X POST \
+  http://localhost:8001/api/v1/namespaces/default/pods/<pod-name>/binding \
+  -H "Content-Type: application/json" \
+  -d '{
+    "apiVersion": "v1",
+    "kind": "Binding",
+    "metadata": { "name": "<pod-name>", "namespace": "default" },
+    "target": { "apiVersion": "v1", "kind": "Node", "name": "<node-name>" }
+  }'
+```
+
+---
+
+### Labels and Selectors
+
+```bash
+# Filter pods by label
+kubectl get pods -l app=payments-api
+kubectl get pods -l app=payments-api,env=prod   # AND logic
+
+# Filter any resource type
+kubectl get all -l env=prod
+
+# Show labels on pods
+kubectl get pods --show-labels
+
+# Show labels on nodes
+kubectl get nodes --show-labels
+
+# Add a label to a pod
+kubectl label pod <pod-name> env=prod
+
+# Remove a label from a pod
+kubectl label pod <pod-name> env-
+
+# Compare priority classes across pods
+kubectl get pods -o custom-columns="NAME:.metadata.name,PRIORITY:.spec.priorityClassName"
+kubectl get pods -A -o custom-columns="NAMESPACE:.metadata.namespace,NAME:.metadata.name,PRIORITY:.spec.priorityClassName"
+```
+
+---
+
+### Taints and Tolerations
+
+```bash
+# Apply a taint to a node
+kubectl taint nodes <node-name> app=payments:NoSchedule
+kubectl taint nodes <node-name> app=payments:NoExecute
+kubectl taint nodes <node-name> app=payments:PreferNoSchedule
+
+# Remove a taint (append -)
+kubectl taint nodes <node-name> app=payments:NoSchedule-
+
+# View taints on a node
+kubectl describe node <node-name> | grep -i taint
+
+# View master node taint
+kubectl describe node <control-plane-node> | grep -i taint
+```
+
+---
+
+### Node Labels and Selectors
+
+```bash
+# Add a label to a node
+kubectl label nodes <node-name> size=large
+
+# Remove a label from a node
+kubectl label nodes <node-name> size-
+
+# Verify node labels
+kubectl get node <node-name> --show-labels
+```
+
+---
+
+### Resource Requirements
+
+```bash
+# View resource usage across pods
+kubectl top pods
+kubectl top pods -n <namespace>
+kubectl top nodes
+
+# Check why pod is Pending (insufficient resources)
+kubectl describe pod <pod-name>                 # look for: Insufficient cpu / memory
+
+# View LimitRange in a namespace
+kubectl get limitrange -n <namespace>
+kubectl describe limitrange -n <namespace>
+
+# View ResourceQuota in a namespace
+kubectl get resourcequota -n <namespace>
+kubectl describe resourcequota -n <namespace>   # shows used vs hard limits
+```
+
+---
+
+### Editing Pods and Deployments
+
+```bash
+# Edit a live deployment (no restrictions)
+kubectl edit deployment <deployment-name>
+
+# Edit a pod — will be rejected for immutable fields, saves to temp file
+kubectl edit pod <pod-name>
+
+# Export pod spec to file, edit, delete, recreate
+kubectl get pod <pod-name> -o yaml > my-pod.yaml
+kubectl delete pod <pod-name>
+kubectl create -f my-pod.yaml
+
+# One-command force delete and recreate from file
+kubectl replace --force -f my-pod.yaml
+```
+
+---
+
+### DaemonSets
+
+```bash
+# List DaemonSets
+kubectl get daemonsets -n kube-system
+kubectl get ds -n kube-system                   # shorthand
+
+# Inspect DaemonSet — shows desired/current/ready/node counts
+kubectl describe daemonset <ds-name> -n kube-system
+
+# Check which nodes have the DaemonSet pod running
+kubectl get pods -l <ds-label> -o wide -n kube-system
+
+# Generate DaemonSet manifest via Deployment dry-run (no native create ds command)
+kubectl create deployment <name> --image=<image> --dry-run=client -o yaml > ds.yaml
+# Then edit: change kind to DaemonSet, remove replicas and strategy fields
+kubectl apply -f ds.yaml
+```
+
+---
+
+### Static Pods
+
+```bash
+# Find the static pod manifest directory
+ps aux | grep kubelet | grep -E 'pod-manifest-path|config'
+grep staticPodPath /var/lib/kubelet/config.yaml
+
+# Generate static pod manifest (fastest method)
+kubectl run <pod-name> --image=<image> --dry-run=client -o yaml > \
+  /etc/kubernetes/manifests/<pod-name>.yaml
+
+# View static pods (when no apiserver available)
+crictl ps
+
+# Verify mirror pod created by kubelet (when part of a cluster)
+kubectl get pods -A | grep <pod-name>           # name appears as <pod-name>-<node-name>
+
+# Delete a static pod — remove the manifest file (kubectl delete will not work)
+rm /etc/kubernetes/manifests/<pod-name>.yaml
+
+# View control plane static pod manifests
+ls /etc/kubernetes/manifests/
+```
+
+---
+
+### Priority Classes
+
+```bash
+# List all priority classes
+kubectl get priorityclass
+kubectl get pc                                  # shorthand
+
+# Inspect a priority class
+kubectl describe priorityclass <name>
+
+# Check priority class assigned to pods
+kubectl get pods -o custom-columns="NAME:.metadata.name,PRIORITY:.spec.priorityClassName"
+```
+
+---
+
+### Multiple Schedulers
+
+```bash
+# Verify custom scheduler pod is running
+kubectl get pods -n kube-system | grep scheduler
+
+# Check which scheduler placed a pod
+kubectl get events -o wide | grep Scheduled     # Source column shows scheduler name
+
+# View scheduler logs
+kubectl logs -n kube-system <scheduler-pod-name>
+
+# Confirm schedulerName on a pod
+kubectl get pod <pod-name> -o jsonpath='{.spec.schedulerName}'
+```
+
+---
+
+### Admission Controllers
+
+```bash
+# View enabled admission controllers (kubeadm cluster)
+kubectl exec -n kube-system kube-apiserver-controlplane -- \
+  kube-apiserver -h | grep enable-admission-plugins
+
+# Inspect running apiserver admission flags
+kubectl exec -n kube-system kube-apiserver-controlplane -- \
+  ps aux | grep admission
+
+# Edit apiserver manifest to enable/disable admission controllers
+vi /etc/kubernetes/manifests/kube-apiserver.yaml
+# Add flags under command:
+#   --enable-admission-plugins=NodeRestriction,NamespaceAutoProvision
+#   --disable-admission-plugins=DefaultStorageClass
+
+# List validating webhook configurations
+kubectl get validatingwebhookconfigurations
+kubectl get validatingwebhookconfigurations -o yaml
+
+# List mutating webhook configurations
+kubectl get mutatingwebhookconfigurations
+kubectl get mutatingwebhookconfigurations -o yaml
+```
