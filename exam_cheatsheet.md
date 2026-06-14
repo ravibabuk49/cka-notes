@@ -406,6 +406,9 @@ kubectl explain persistentvolume --recursive
 | `Service` | `v1` |
 | `Namespace` | `v1` |
 | `ServiceAccount` | `v1` |
+| `LimitRange` | `v1` |
+| `ResourceQuota` | `v1` |
+| `Binding` | `v1` |
 | `ReplicaSet` | `apps/v1` |
 | `Deployment` | `apps/v1` |
 | `DaemonSet` | `apps/v1` |
@@ -420,6 +423,9 @@ kubectl explain persistentvolume --recursive
 | `ClusterRoleBinding` | `rbac.authorization.k8s.io/v1` |
 | `Role` | `rbac.authorization.k8s.io/v1` |
 | `RoleBinding` | `rbac.authorization.k8s.io/v1` |
+| `PriorityClass` | `scheduling.k8s.io/v1` |
+| `ValidatingWebhookConfiguration` | `admissionregistration.k8s.io/v1` |
+| `MutatingWebhookConfiguration` | `admissionregistration.k8s.io/v1` |
 
 ---
 
