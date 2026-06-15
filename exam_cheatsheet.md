@@ -665,3 +665,71 @@ kubectl get validatingwebhookconfigurations -o yaml
 kubectl get mutatingwebhookconfigurations
 kubectl get mutatingwebhookconfigurations -o yaml
 ```
+
+## 03 — Logging & Monitoring
+
+### Metrics Server
+
+```bash
+# Enable on Minikube
+minikube addons enable metrics-server
+
+# Deploy on kubeadm / cloud clusters
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+# Verify Metrics Server is running
+kubectl get deployment -n kube-system metrics-server
+kubectl get pods -n kube-system | grep metrics-server
+
+# Node-level CPU and memory
+kubectl top nodes
+
+# Pod-level CPU and memory
+kubectl top pods
+kubectl top pods -n <namespace>
+
+# Sort by CPU or memory
+kubectl top pods --sort-by=cpu
+kubectl top pods --sort-by=memory
+
+# Show per-container metrics
+kubectl top pods --containers
+```
+
+---
+
+### Application Logs
+
+```bash
+# View logs — single container pod
+kubectl logs <pod-name>
+
+# Stream logs live
+kubectl logs <pod-name> -f
+
+# Last N lines
+kubectl logs <pod-name> --tail=50
+
+# Logs since a duration
+kubectl logs <pod-name> --since=1h
+kubectl logs <pod-name> --since=5m
+
+# Logs with timestamps
+kubectl logs <pod-name> --timestamps
+
+# Multi-container pod — must specify container name
+kubectl logs <pod-name> -c <container-name>
+kubectl logs <pod-name> -c <container-name> -f
+
+# Logs from a previously terminated/crashed container
+kubectl logs <pod-name> -c <container-name> --previous
+
+# Logs from all containers in a pod simultaneously
+kubectl logs <pod-name> --all-containers=true
+kubectl logs <pod-name> --all-containers=true -f
+
+# Find container names in a pod (if unsure)
+kubectl describe pod <pod-name> | grep -i "container"
+```
+
+
