@@ -97,7 +97,7 @@ Every section follows this structure:
 | # | Section | Status |
 |---|---|---|
 | 01 | Monitor Cluster Components | ✅ Done |
-| 02 | Managing Application Logs | ⬜ Pending |
+| 02 | Managing Application Logs | ✅ Done |
 
 ### 04 — Application Lifecycle Management
 
