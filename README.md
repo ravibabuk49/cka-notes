@@ -106,6 +106,7 @@ Every section follows this structure:
 | # | Section | Status |
 |---|---|---|
 | 01 | Rolling Updates and Rollbacks | ✅ Done |
+| 02 | Configure Applications Intro | ✅ Done |
 | 02 | Commands and Arguments | ⬜ Pending |
 | 03 | Environment Variables | ⬜ Pending |
 | 04 | ConfigMaps | ⬜ Pending |
