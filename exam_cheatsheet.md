@@ -118,6 +118,8 @@ kubectl get pods -o wide                        # includes node and IP
 kubectl get pods -n <namespace>                 # specific namespace
 kubectl get pods --all-namespaces               # all namespaces
 kubectl get pods -l app=myapp                   # filter by label
+kubectl get pods --all-namespaces --field-selector spec.nodeName=<NODE_NAME>    # to find all pods across all namespaces running on a specific node
+kubectl get pods -n <NAMESPACE_NAME> --field-selector spec.nodeName=<NODE_NAME> # to find all pods across a single namespace running on a specific node
 
 # Inspect
 kubectl describe pod <pod-name>                 # full detail + events
