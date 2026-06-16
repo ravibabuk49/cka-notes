@@ -107,7 +107,7 @@ Every section follows this structure:
 |---|---|---|
 | 01 | Rolling Updates and Rollbacks | ✅ Done |
 | 02 | Configure Applications Intro | ✅ Done |
-| 03 | Commands and Arguments | ⬜ Pending |
+| 03 | Commands and Arguments | ✅ Done |
 | 04 | Environment Variables | ⬜ Pending |
 | 05 | ConfigMaps | ⬜ Pending |
 | 06 | Secrets | ⬜ Pending |
