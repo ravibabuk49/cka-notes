@@ -99,6 +99,7 @@ Every section follows this structure:
 | 01 | Monitor Cluster Components | ✅ Done |
 | 02 | Managing Application Logs | ✅ Done |
 | 03 | Production Logging Monitoring Stack | ✅ Done |
+| 04 | Production Commands Reference | ✅ Done |
 
 ### 04 — Application Lifecycle Management
 
