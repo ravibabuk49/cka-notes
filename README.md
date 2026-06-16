@@ -107,12 +107,12 @@ Every section follows this structure:
 |---|---|---|
 | 01 | Rolling Updates and Rollbacks | ✅ Done |
 | 02 | Configure Applications Intro | ✅ Done |
-| 02 | Commands and Arguments | ⬜ Pending |
-| 03 | Environment Variables | ⬜ Pending |
-| 04 | ConfigMaps | ⬜ Pending |
-| 05 | Secrets | ⬜ Pending |
-| 06 | Multi-Container Pods | ⬜ Pending |
-| 07 | Init Containers | ⬜ Pending |
+| 03 | Commands and Arguments | ⬜ Pending |
+| 04 | Environment Variables | ⬜ Pending |
+| 05 | ConfigMaps | ⬜ Pending |
+| 06 | Secrets | ⬜ Pending |
+| 07 | Multi-Container Pods | ⬜ Pending |
+| 08 | Init Containers | ⬜ Pending |
 
 ### 05 — Cluster Maintenance
 
