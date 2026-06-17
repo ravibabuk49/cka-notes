@@ -107,12 +107,13 @@ Every section follows this structure:
 |---|---|---|
 | 01 | Rolling Updates and Rollbacks | ✅ Done |
 | 02 | Configure Applications Intro | ✅ Done |
-| 03 | Commands and Arguments | ✅ Done |
-| 04 | Environment Variables | ⬜ Pending |
-| 05 | ConfigMaps | ⬜ Pending |
-| 06 | Secrets | ⬜ Pending |
-| 07 | Multi-Container Pods | ⬜ Pending |
-| 08 | Init Containers | ⬜ Pending |
+| 03 | Commands and Arguments in Docker | ✅ Done |
+| 04 | Commands and Arguments in Kubernetes | ✅ Done |
+| 05 | Environment Variables | ⬜ Pending |
+| 06 | ConfigMaps | ⬜ Pending |
+| 07 | Secrets | ⬜ Pending |
+| 08 | Multi-Container Pods | ⬜ Pending |
+| 09 | Init Containers | ⬜ Pending |
 
 ### 05 — Cluster Maintenance
 
