@@ -109,7 +109,7 @@ Every section follows this structure:
 | 02 | Configure Applications Intro | ✅ Done |
 | 03 | Commands and Arguments in Docker | ✅ Done |
 | 04 | Commands and Arguments in Kubernetes | ✅ Done |
-| 05 | Environment Variables | ⬜ Pending |
+| 05 | Environment Variables | ✅ Done |
 | 06 | ConfigMaps | ⬜ Pending |
 | 07 | Secrets | ⬜ Pending |
 | 08 | Multi-Container Pods | ⬜ Pending |
