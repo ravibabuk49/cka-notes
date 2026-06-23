@@ -2,7 +2,7 @@
 
 ### What it is
 
-A **rollout** is the process by which Kubernetes applies a change to a Deployment's Pod template. Each rollout creates a new **ReplicaSet** and is recorded as a numbered **revision**. This revision history enables controlled rollbacks to any prior state.
+A **Rollout** is the native Kubernetes mechanism by which a `Deployment` controller safely transitions an application from one state to another. When a Deployment's pod template (e.g., container image, labels, resources) is modified, Kubernetes triggers a rollout, creating a new `ReplicaSet` alongside the old one. A **Rollback** is the exact inverse operation, shifting traffic and pod scaling back to a previously recorded `ReplicaSet` revision.
 
 ---
 
