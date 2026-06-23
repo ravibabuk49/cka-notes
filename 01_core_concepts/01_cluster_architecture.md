@@ -20,8 +20,6 @@ To host applications in the form of containers in an automated fashion — makin
 
 ### Mental Model — Azure Resource Manager (ARM) Analogy
 
-You already know this architecture from daily Terraform and AKS work — Kubernetes control plane and ARM solve the exact same class of problem: providing a single, mediated, auditable control surface over a fleet of resources.
-
 | Azure concept | Kubernetes equivalent | Why the mapping holds |
 |---|---|---|
 | Azure Resource Manager (ARM) | `kube-apiserver` | Every operation — Portal, CLI, Terraform, SDK — goes through ARM first. Nothing modifies a resource directly. Same as `kube-apiserver` being the only entry point for kubectl, controllers, and kubelets |
