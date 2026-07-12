@@ -111,7 +111,7 @@ Every section follows this structure:
 | 04 | Commands and Arguments in Kubernetes | ✅ Done |
 | 05 | Environment Variables | ✅ Done |
 | 06 | ConfigMaps | ✅ Done |
-| 07 | Secrets | ⬜ Pending |
+| 07 | Secrets | ✅ Done |
 | 08 | Multi-Container Pods | ⬜ Pending |
 | 09 | Init Containers | ⬜ Pending |
 
