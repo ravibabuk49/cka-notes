@@ -69,6 +69,34 @@ kubectl create -f secret.yaml
 
 ---
 
+### A Note on Secret Safety
+
+Kubernetes documentation describes Secrets as a "safer option" for sensitive data — but this needs careful qualification. Secrets are safer than storing values in plain text or ConfigMaps because they reduce the risk of accidental exposure. They are **not** inherently secure.
+
+**What makes Secrets insecure by default:**
+- base64 is trivially reversible — any user with `get secret` RBAC permission can decode every value immediately.
+- Secrets are stored **unencrypted in etcd** unless you explicitly enable encryption at rest.
+- Secret manifest YAML files committed to Git are effectively plain text — the encoding offers no protection.
+
+**What Kubernetes does to limit Secret exposure at the node level:**
+- A Secret is only sent to a node if a Pod on that node actually requires it — Secrets are not broadcast cluster-wide.
+- Kubelet stores Secrets in a **tmpfs** (in-memory filesystem) — they are never written to disk on the node.
+- When the Pod depending on the Secret is deleted, Kubelet deletes its local copy of the Secret data.
+
+**Best practices that make Secrets genuinely safer:**
+- Never commit Secret manifest files (with real values) to source control.
+- Enable [Encryption at Rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/) so Secrets are encrypted in etcd.
+- Use RBAC to restrict `get`/`list` access to Secret objects — `list secrets` in the wrong hands is as dangerous as `get`.
+- Prefer external secret management tools for production workloads:
+  - **Azure Key Vault + Secrets Store CSI Driver** (AKS-native, recommended)
+  - **External Secrets Operator** (syncs from Key Vault, AWS Secrets Manager, GCP Secret Manager into Kubernetes Secrets)
+  - **HashiCorp Vault** (self-hosted, fine-grained secret lifecycle management)
+  - **Helm Secrets** (encrypts Secret values in Helm chart values files using SOPS)
+
+> Read the official [protections](https://kubernetes.io/docs/concepts/configuration/secret/#protections) and [risks](https://kubernetes.io/docs/concepts/configuration/secret/#risks) sections in the Kubernetes documentation for the complete picture.
+
+---
+
 ### Viewing Secrets
 
 ```bash
@@ -179,5 +207,4 @@ This is the preferred injection method for applications that read config from th
 - By default, Secrets in AKS (and all Kubernetes clusters) are stored **unencrypted** in etcd — only base64-encoded. Enable **etcd encryption at rest** via Azure Disk Encryption or AKS encryption policy for true at-rest security.
 - The recommended AKS-native pattern is **Azure Key Vault + Secrets Store CSI Driver** — Secrets live in Key Vault (RBAC-controlled, audited, rotatable) and are mounted into Pods without ever being stored as Kubernetes Secret objects.
 - AKS Workload Identity integrates with the CSI Driver so Pods authenticate to Key Vault using their managed identity — no credentials needed in the cluster at all.
-
 
