@@ -112,7 +112,7 @@ Every section follows this structure:
 | 05 | Environment Variables | ✅ Done |
 | 06 | ConfigMaps | ✅ Done |
 | 07 | Secrets | ✅ Done |
-| 08 | Multi-Container Pods | ⬜ Pending |
+| 08 | Multi-Container Pods | ✅ Done |
 | 09 | Init Containers | ⬜ Pending |
 
 ### 05 — Cluster Maintenance
