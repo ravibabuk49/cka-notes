@@ -113,7 +113,7 @@ Every section follows this structure:
 | 06 | ConfigMaps | ✅ Done |
 | 07 | Secrets | ✅ Done |
 | 08 | Multi-Container Pods | ✅ Done |
-| 09 | Init Containers | ⬜ Pending |
+| 09 | Init/sidecar Containers | ✅ Done |
 
 ### 05 — Cluster Maintenance
 
