@@ -1,4 +1,4 @@
-# 09 — Exam Cheatsheet
+# Exam Cheatsheet
 
 > Commands only. No explanations. Rapid-fire revision before the exam.
 > Rule: if you hesitate on a command during revision, you need more practice with it.
@@ -411,6 +411,8 @@ kubectl explain persistentvolume --recursive
 | `LimitRange` | `v1` |
 | `ResourceQuota` | `v1` |
 | `Binding` | `v1` |
+| `ConfigMap` | `v1` |
+| `Secret` | `v1` |
 | `ReplicaSet` | `apps/v1` |
 | `Deployment` | `apps/v1` |
 | `DaemonSet` | `apps/v1` |
@@ -428,6 +430,8 @@ kubectl explain persistentvolume --recursive
 | `PriorityClass` | `scheduling.k8s.io/v1` |
 | `ValidatingWebhookConfiguration` | `admissionregistration.k8s.io/v1` |
 | `MutatingWebhookConfiguration` | `admissionregistration.k8s.io/v1` |
+| `HorizontalPodAutoscaler` | `autoscaling/v2` |
+| `VerticalPodAutoscaler` | `autoscaling.k8s.io/v1` |
 
 ---
 
@@ -734,4 +738,191 @@ kubectl logs <pod-name> --all-containers=true -f
 kubectl describe pod <pod-name> | grep -i "container"
 ```
 
+---
 
+## 04 — Application Lifecycle Management
+
+### Rollouts and Rollbacks
+
+```bash
+# Check rollout status (blocks until complete — useful in scripts)
+kubectl rollout status deployment/<name>
+
+# View revision history
+kubectl rollout history deployment/<name>
+
+# View a specific revision's details
+kubectl rollout history deployment/<name> --revision=2
+
+# Trigger a rollout — declarative (preferred)
+kubectl apply -f deployment.yaml
+
+# Trigger a rollout — imperative (does NOT update local YAML)
+kubectl set image deployment/<name> <container>=<image>:<tag>
+
+# Roll back to previous revision
+kubectl rollout undo deployment/<name>
+
+# Roll back to a specific revision
+kubectl rollout undo deployment/<name> --to-revision=1
+
+# View ReplicaSets to confirm old/new RS state
+kubectl get rs
+
+# Inspect deployment events — shows strategy used and scale transitions
+kubectl describe deployment <name>
+```
+
+---
+
+### Environment Variables
+
+```bash
+# Verify env vars are set correctly inside a running container
+kubectl exec <pod-name> -- env
+
+# Verify a specific env var
+kubectl exec <pod-name> -- env | grep <VAR_NAME>
+```
+
+---
+
+### ConfigMaps
+
+```bash
+# Create — imperative, inline key-value pairs
+kubectl create configmap <name> --from-literal=KEY=value --from-literal=KEY2=value2
+
+# Create — imperative, from file
+kubectl create configmap <name> --from-file=<path-to-file>
+
+# Create — declarative
+kubectl apply -f configmap.yaml
+
+# List ConfigMaps
+kubectl get configmaps
+kubectl get cm                                  # shorthand
+
+# Inspect — shows keys and values
+kubectl describe configmap <name>
+
+# View full YAML including values
+kubectl get configmap <name> -o yaml
+```
+
+---
+
+### Secrets
+
+```bash
+# Create — imperative (Kubernetes base64-encodes values automatically)
+kubectl create secret generic <name> \
+  --from-literal=KEY=value \
+  --from-literal=KEY2=value2
+
+# Create — from file
+kubectl create secret generic <name> --from-file=<path-to-file>
+
+# Create — declarative (YOU must base64-encode values manually)
+echo -n 'plaintext' | base64                   # encode
+echo -n 'encodedvalue' | base64 --decode        # decode
+
+kubectl apply -f secret.yaml
+
+# List Secrets
+kubectl get secrets
+
+# Inspect — shows keys but hides values
+kubectl describe secret <name>
+
+# View encoded values
+kubectl get secret <name> -o yaml
+
+# Decode a specific value from the YAML output
+echo -n '<base64-value>' | base64 --decode
+```
+
+---
+
+### Multi-Container Pods / Init Containers
+
+```bash
+# Check init container status — shown separately from main containers
+kubectl describe pod <pod-name>                 # Init Containers section
+
+# View init container logs
+kubectl logs <pod-name> -c <init-container-name>
+
+# View logs of all containers including init
+kubectl logs <pod-name> --all-containers=true
+
+# Debug a stuck init container
+kubectl logs <pod-name> -c <init-container-name>
+kubectl describe pod <pod-name>                 # check Events for failure reason
+```
+
+---
+
+### Horizontal Pod Autoscaler (HPA)
+
+```bash
+# Create HPA — imperative
+kubectl autoscale deployment <name> \
+  --cpu-percent=50 \
+  --min=1 \
+  --max=10
+
+# Create HPA — declarative
+kubectl apply -f hpa.yaml
+
+# List HPAs — shows current vs target metrics and replica counts
+kubectl get hpa
+
+# Inspect HPA
+kubectl describe hpa <name>
+
+# Delete HPA (Deployment keeps running at current replica count)
+kubectl delete hpa <name>
+
+# Verify Metrics Server is running (HPA prerequisite)
+kubectl get pods -n kube-system | grep metrics-server
+```
+
+---
+
+### Vertical Pod Autoscaler (VPA)
+
+```bash
+# Deploy VPA components (not built-in — must install separately)
+kubectl apply -f https://github.com/kubernetes/autoscaler/releases/latest/download/vertical-pod-autoscaler.yaml
+
+# Verify VPA components are running
+kubectl get pods -n kube-system | grep vpa
+# Expected: vpa-admission-controller, vpa-recommender, vpa-updater
+
+# Create VPA — declarative only (no imperative command)
+kubectl apply -f vpa.yaml
+
+# List VPAs
+kubectl get vpa
+
+# View VPA recommendations
+kubectl describe vpa <name>
+
+# Delete VPA
+kubectl delete vpa <name>
+```
+
+---
+
+### base64 Encoding (Secrets)
+
+```bash
+# Encode — required for declarative Secret manifests
+echo -n 'mysql' | base64                        # bXlzcWw=
+echo -n 'root' | base64                         # cm9vdA==
+echo -n 'mypassword' | base64                   # bXlwYXNzd29yZA==
+
+# Decode — inspect a Secret value from kubectl get secret -o yaml
+echo -n 'bXlzcWw=' | base64 --decode            # mysql
+```
