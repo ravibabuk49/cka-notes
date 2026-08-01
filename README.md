@@ -114,6 +114,11 @@ Every section follows this structure:
 | 07 | Secrets | ✅ Done |
 | 08 | Multi-Container Pods | ✅ Done |
 | 09 | Init/sidecar Containers | ✅ Done |
+| 10 | Self-Healing Applications | ✅ Done |
+| 11 | Auto Scaling Overview | ✅ Done |
+| 12 | Horizontal Pod Autoscaler (HPA) | ✅ Done |
+| 13 | In-Place Resizing of Pod Resources | ✅ Done |
+| 14 | Vertical Pod Autoscaler (VPA) | ✅ Done |
 
 ### 05 — Cluster Maintenance
 
