@@ -18,23 +18,6 @@ To host applications in the form of containers in an automated fashion — makin
 
 ---
 
-### Mental Model — Azure Resource Manager (ARM) Analogy
-
-| Azure concept | Kubernetes equivalent | Why the mapping holds |
-|---|---|---|
-| Azure Resource Manager (ARM) | `kube-apiserver` | Every operation — Portal, CLI, Terraform, SDK — goes through ARM first. Nothing modifies a resource directly. Same as `kube-apiserver` being the only entry point for kubectl, controllers, and kubelets |
-| ARM resource state (subscription's resource state) | `etcd` | The authoritative record of every resource's current configuration and status — exactly what a `terraform plan` compares against |
-| Azure Fabric Controller (host/placement engine) | `kube-scheduler` | Decides which physical host a VM lands on based on capacity and constraints. It decides placement — it does not provision the VM itself |
-| Azure Policy / Azure Automation (compliance engine) | `kube-controller-manager` | Continuously evaluates actual state against desired/policy state and remediates drift — same pattern as a ReplicaSet controller noticing a missing pod and recreating it |
-| Azure VM Guest Agent (`waagent`) | `kubelet` | The agent running inside each compute instance that receives instructions from the control plane, applies them, and reports status back — exactly what `kubelet` does on each node |
-| Azure Load Balancer / NSG rules | `kube-proxy` | Maintains the routing and firewall rules that let independently placed compute instances reach each other at a stable address |
-| Virtual Machine | Pod | The smallest unit of compute the control plane schedules, tracks, and reports status for |
-| Processes inside a VM | Containers inside a pod | Multiple processes share the VM's network stack — similar to multiple containers sharing a pod's network namespace and reachable via `localhost` |
-
-> **Why this matters technically:** When you run `terraform apply`, Terraform talks only to ARM — never directly to the underlying compute fabric. ARM validates, persists state, and orchestrates the rest. `kube-apiserver` plays the identical role: every component — scheduler, controllers, kubelets — only ever talks to the apiserver, never to etcd or to each other directly. This is the same architectural reason Azure (and every major cloud) centralises control through one API: mediated access to shared state is what makes the system consistent, auditable, and safe to automate against.
-
----
-
 ### Control Plane Components
 
 | Component | What it does |
