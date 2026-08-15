@@ -16,6 +16,7 @@ v1.36.3
 ```
 [🔗 Latest stable release](https://kubernetes.io/releases/)
 
+
 Example from `kubectl get nodes`:
 ```
 NAME        STATUS   VERSION
