@@ -8,14 +8,14 @@ Kubernetes follows **semantic versioning** (`MAJOR.MINOR.PATCH`) for all control
 
 ### Version Number Anatomy
 
+[🔗 Latest stable release](https://kubernetes.io/releases/)
+
 ```
 v1.36.3
 │  │   └── PATCH — bug fixes and security patches; released frequently
 │  └────── MINOR — new features and API additions; released every ~4 months
 └───────── MAJOR — breaking changes; has been v1 since July 2015
 ```
-[🔗 Latest stable release](https://kubernetes.io/releases/)
-
 
 Example from `kubectl get nodes`:
 ```
@@ -75,7 +75,7 @@ Each minor version receives approximately **14 months of total support**:
 - 12 months of active patch support
 - 2 months of upgrade grace period (maintenance mode)
 
-> This means if you are on v1.33 today, you are running an **unsupported, unpatched** cluster. Minimum supported version is currently v1.34.
+> If you are on v1.33 today, you are running an **unsupported, unpatched** cluster. Minimum supported version is currently v1.34.
 
 ---
 
@@ -171,4 +171,14 @@ kubectl -n kube-system get deployment coredns -o jsonpath='{.spec.template.spec.
 - Available versions per region: `az aks get-versions --location eastus --output table`
 - AKS does not expose every upstream patch — only qualified patch versions are offered.
 - EKS follows a similar N-2 model with extended support options available for an additional fee.
+
+---
+
+### References
+
+- [Kubernetes API Overview](https://kubernetes.io/docs/concepts/overview/kubernetes-api/)
+
+> The links below are not required for the exam — for deeper reading only:
+- [API Conventions — Kubernetes Community](https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md)
+- [API Changes — Kubernetes Community](https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api_changes.md)
 
