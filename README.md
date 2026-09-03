@@ -124,10 +124,11 @@ Every section follows this structure:
 
 | # | Section | Status |
 |---|---|---|
-| 01 | OS Upgrades | ⬜ Pending |
-| 02 | Kubernetes Releases | ⬜ Pending |
-| 03 | Cluster Upgrade Process | ⬜ Pending |
-| 04 | Backup and Restore Methods | ⬜ Pending |
+| 01 | Cluster Maintenance Section Introduction | ✅ Done |
+| 02 | OS Upgrades | ✅ Done |
+| 03 | Kubernetes Releases | ✅ Done |
+| 04 | Cluster Upgrade Process | ✅ Done |
+| 05 | Backup and Restore Methods | ✅ Done |
 
 ### 06 — Security
 
