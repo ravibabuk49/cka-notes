@@ -25,19 +25,27 @@ export ETCDCTL_API=3
 ## etcd
 
 ```bash
-# Backup
+# Check etcdctl version and API version
+etcdctl version
+
+# Backup (online — requires running etcd + certs)
 ETCDCTL_API=3 etcdctl snapshot save /opt/snapshot-pre-boot.db \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
   --cert=/etc/kubernetes/pki/etcd/server.crt \
   --key=/etc/kubernetes/pki/etcd/server.key
 
-# Restore
-ETCDCTL_API=3 etcdctl snapshot restore /opt/snapshot-pre-boot.db \
+# Verify snapshot (etcdutl preferred in v3.5+; etcdctl also works)
+etcdutl snapshot status /opt/snapshot-pre-boot.db --write-out=table
+
+# Restore (etcdutl preferred in v3.5+ — offline, no certs needed)
+etcdutl snapshot restore /opt/snapshot-pre-boot.db \
   --data-dir=/var/lib/etcd-from-backup
 
-# Verify snapshot
-ETCDCTL_API=3 etcdctl snapshot status /opt/snapshot-pre-boot.db
+# File-level backup (offline, no certs needed, etcd can be stopped)
+etcdutl backup \
+  --data-dir /var/lib/etcd \
+  --backup-dir /backup/etcd-backup
 
 # List all keys in etcd
 kubectl exec etcd-controlplane -n kube-system -- \
@@ -45,9 +53,6 @@ kubectl exec etcd-controlplane -n kube-system -- \
   --cacert /etc/kubernetes/pki/etcd/ca.crt \
   --cert /etc/kubernetes/pki/etcd/server.crt \
   --key /etc/kubernetes/pki/etcd/server.key"
-
-# Check etcdctl version and API version
-etcdctl version
 ```
 
 ---
@@ -375,7 +380,7 @@ kubectl explain persistentvolume --recursive
 
 ## Key File Paths
 
-```bash
+```
 /etc/kubernetes/manifests/          # static pod definitions (control plane)
 /etc/kubernetes/admin.conf          # cluster admin kubeconfig
 /etc/kubernetes/pki/                # all cluster TLS certificates
@@ -389,49 +394,50 @@ kubectl explain persistentvolume --recursive
 
 ## Key Ports
 
-| Component | Port | Purpose |
-|---|---|---|
-| `kube-apiserver` | 6443 | HTTPS API — all client and component traffic |
-| `etcd` | 2379 | Client connections (kube-apiserver → etcd) |
-| `etcd` | 2380 | Peer communication (etcd ↔ etcd in HA) |
-| `kubelet` | 10250 | HTTPS — apiserver → kubelet communication |
-| `kube-scheduler` | 10259 | HTTPS metrics / health |
-| `kube-controller-manager` | 10257 | HTTPS metrics / health |
+| Component                 | Port  | Purpose                                      |
+| ------------------------- | ----- | -------------------------------------------- |
+| `kube-apiserver`          | 6443  | HTTPS API — all client and component traffic |
+| `etcd`                    | 2379  | Client connections (kube-apiserver → etcd)   |
+| `etcd`                    | 2380  | Peer communication (etcd ↔ etcd in HA)       |
+| `kubelet`                 | 10250 | HTTPS — apiserver → kubelet communication    |
+| `kube-scheduler`          | 10259 | HTTPS metrics / health                       |
+| `kube-controller-manager` | 10257 | HTTPS metrics / health                       |
 
 ---
 
 ## Quick Reference — apiVersion by Kind
 
-| Kind | apiVersion |
-|---|---|
-| `Pod` | `v1` |
-| `Service` | `v1` |
-| `Namespace` | `v1` |
-| `ServiceAccount` | `v1` |
-| `LimitRange` | `v1` |
-| `ResourceQuota` | `v1` |
-| `Binding` | `v1` |
-| `ConfigMap` | `v1` |
-| `Secret` | `v1` |
-| `ReplicaSet` | `apps/v1` |
-| `Deployment` | `apps/v1` |
-| `DaemonSet` | `apps/v1` |
-| `StatefulSet` | `apps/v1` |
-| `Job` | `batch/v1` |
-| `CronJob` | `batch/v1` |
-| `Ingress` | `networking.k8s.io/v1` |
-| `NetworkPolicy` | `networking.k8s.io/v1` |
-| `PersistentVolume` | `v1` |
-| `PersistentVolumeClaim` | `v1` |
-| `ClusterRole` | `rbac.authorization.k8s.io/v1` |
-| `ClusterRoleBinding` | `rbac.authorization.k8s.io/v1` |
-| `Role` | `rbac.authorization.k8s.io/v1` |
-| `RoleBinding` | `rbac.authorization.k8s.io/v1` |
-| `PriorityClass` | `scheduling.k8s.io/v1` |
+| Kind                             | apiVersion                        |
+| -------------------------------- | --------------------------------- |
+| `Pod`                            | `v1`                              |
+| `Service`                        | `v1`                              |
+| `Namespace`                      | `v1`                              |
+| `ServiceAccount`                 | `v1`                              |
+| `LimitRange`                     | `v1`                              |
+| `ResourceQuota`                  | `v1`                              |
+| `Binding`                        | `v1`                              |
+| `ConfigMap`                      | `v1`                              |
+| `Secret`                         | `v1`                              |
+| `ReplicaSet`                     | `apps/v1`                         |
+| `Deployment`                     | `apps/v1`                         |
+| `DaemonSet`                      | `apps/v1`                         |
+| `StatefulSet`                    | `apps/v1`                         |
+| `Job`                            | `batch/v1`                        |
+| `CronJob`                        | `batch/v1`                        |
+| `Ingress`                        | `networking.k8s.io/v1`            |
+| `NetworkPolicy`                  | `networking.k8s.io/v1`            |
+| `PersistentVolume`               | `v1`                              |
+| `PersistentVolumeClaim`          | `v1`                              |
+| `PodDisruptionBudget`            | `policy/v1`                       |
+| `ClusterRole`                    | `rbac.authorization.k8s.io/v1`    |
+| `ClusterRoleBinding`             | `rbac.authorization.k8s.io/v1`    |
+| `Role`                           | `rbac.authorization.k8s.io/v1`    |
+| `RoleBinding`                    | `rbac.authorization.k8s.io/v1`    |
+| `PriorityClass`                  | `scheduling.k8s.io/v1`            |
 | `ValidatingWebhookConfiguration` | `admissionregistration.k8s.io/v1` |
-| `MutatingWebhookConfiguration` | `admissionregistration.k8s.io/v1` |
-| `HorizontalPodAutoscaler` | `autoscaling/v2` |
-| `VerticalPodAutoscaler` | `autoscaling.k8s.io/v1` |
+| `MutatingWebhookConfiguration`   | `admissionregistration.k8s.io/v1` |
+| `HorizontalPodAutoscaler`        | `autoscaling/v2`                  |
+| `VerticalPodAutoscaler`          | `autoscaling.k8s.io/v1`           |
 
 ---
 
@@ -671,6 +677,8 @@ kubectl get validatingwebhookconfigurations -o yaml
 kubectl get mutatingwebhookconfigurations
 kubectl get mutatingwebhookconfigurations -o yaml
 ```
+
+---
 
 ## 03 — Logging & Monitoring
 
@@ -925,4 +933,132 @@ echo -n 'mypassword' | base64                   # bXlwYXNzd29yZA==
 
 # Decode — inspect a Secret value from kubectl get secret -o yaml
 echo -n 'bXlzcWw=' | base64 --decode            # mysql
+```
+
+---
+
+## 05 — Cluster Maintenance
+
+### OS Upgrades — Node Drain / Cordon / Uncordon
+
+```bash
+# Safely evict all pods and cordon a node before maintenance
+kubectl drain <node-name> --ignore-daemonsets --delete-emptydir-data
+
+# Drain with custom grace period and timeout
+kubectl drain <node-name> --ignore-daemonsets --delete-emptydir-data \
+  --grace-period=30 --timeout=120s
+
+# Cordon only — mark unschedulable, existing pods stay running
+kubectl cordon <node-name>
+
+# Uncordon — mark schedulable again after maintenance
+kubectl uncordon <node-name>
+
+# Verify node scheduling status
+kubectl get nodes                               # STATUS: Ready,SchedulingDisabled = cordoned
+
+# Check node taints (unschedulable taint applied by cordon/drain)
+kubectl describe node <node-name> | grep -i taint
+
+# Check PodDisruptionBudgets before draining (stalled drain = PDB violation)
+kubectl get pdb -A
+kubectl describe pdb <name> -n <namespace>
+```
+
+---
+
+### Cluster Upgrade (kubeadm)
+
+```bash
+# --- CONTROL PLANE NODE ---
+
+# Step 1: Switch to new minor version repository
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
+  https://pkgs.k8s.io/core:/stable:/v1.36/deb/ /' \
+  | tee /etc/apt/sources.list.d/kubernetes.list
+
+apt-get update
+
+# Step 2: Upgrade kubeadm
+apt-mark unhold kubeadm
+apt-get install -y kubeadm=1.36.3-1.1
+apt-mark hold kubeadm
+
+# Verify kubeadm version
+kubeadm version
+
+# Step 3: Plan the upgrade
+kubeadm upgrade plan
+
+# Step 4: Apply upgrade (control plane only)
+kubeadm upgrade apply v1.36.3
+
+# Step 5: Upgrade kubelet and kubectl on master
+apt-mark unhold kubelet kubectl
+apt-get install -y kubelet=1.36.3-1.1 kubectl=1.36.3-1.1
+apt-mark hold kubelet kubectl
+
+systemctl daemon-reload
+systemctl restart kubelet
+
+# Verify master upgraded
+kubectl get nodes
+
+# --- WORKER NODES (repeat per node) ---
+
+# Step 1: Drain worker (from control plane)
+kubectl drain <node-name> --ignore-daemonsets --delete-emptydir-data
+
+# Step 2: SSH into worker, switch repo and upgrade kubeadm
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
+  https://pkgs.k8s.io/core:/stable:/v1.36/deb/ /' \
+  | tee /etc/apt/sources.list.d/kubernetes.list
+
+apt-get update
+apt-mark unhold kubeadm
+apt-get install -y kubeadm=1.36.3-1.1
+apt-mark hold kubeadm
+
+# Step 3: Update node configuration
+kubeadm upgrade node
+
+# Step 4: Upgrade kubelet and kubectl on worker
+apt-mark unhold kubelet kubectl
+apt-get install -y kubelet=1.36.3-1.1 kubectl=1.36.3-1.1
+apt-mark hold kubelet kubectl
+
+systemctl daemon-reload
+systemctl restart kubelet
+
+# Step 5: Uncordon worker (from control plane)
+kubectl uncordon <node-name>
+
+# Verify all nodes upgraded
+kubectl get nodes
+```
+
+---
+
+### etcd Backup / Restore (Cluster Maintenance context)
+
+```bash
+# Pre-upgrade snapshot (run before kubeadm upgrade apply)
+ETCDCTL_API=3 etcdctl snapshot save /opt/pre-upgrade-$(date +%F).db \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key
+
+# Find cert paths from etcd static pod manifest
+grep -E 'cacert|certfile|keyfile|listen-client' /etc/kubernetes/manifests/etcd.yaml
+
+# Full kubeadm cluster restore sequence
+mv /etc/kubernetes/manifests/kube-apiserver.yaml /tmp/      # stop apiserver
+etcdutl snapshot restore <snapshot.db> --data-dir=/var/lib/etcd-from-backup
+# Edit /etc/kubernetes/manifests/etcd.yaml:
+#   --data-dir=/var/lib/etcd-from-backup
+#   hostPath.path: /var/lib/etcd-from-backup
+mv /tmp/kube-apiserver.yaml /etc/kubernetes/manifests/      # restore apiserver
+watch kubectl get pods -n kube-system                       # confirm recovery
 ```
