@@ -330,3 +330,10 @@ velero install --provider azure --bucket <blob-container> \
 - For user-controlled backup in AKS: use **Velero** with Azure Blob Storage, or **Azure Backup for AKS** (GA since 2023) which integrates natively with AKS and supports scheduled backup and restore of workloads and PVs.
 - `az aks backup` CLI commands are available for Azure Backup for AKS integration.
 
+---
+
+### References
+
+- [Backing up an etcd cluster — Kubernetes Docs](https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/#backing-up-an-etcd-cluster)
+- [etcd v3.5 Recovery Guide — etcd-io](https://github.com/etcd-io/website/blob/main/content/en/docs/v3.5/op-guide/recovery.md)
+
