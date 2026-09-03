@@ -124,11 +124,11 @@ Every section follows this structure:
 
 | # | Section | Status |
 |---|---|---|
-| 01 | Cluster Maintenance Section Introduction | ✅ Done |
-| 02 | OS Upgrades | ✅ Done |
-| 03 | Kubernetes Releases and Versioning | ✅ Done |
-| 04 | Cluster Upgrade Process | ✅ Done |
-| 05 | Backup and Restore Methodologies | ✅ Done |
+| 00 | Cluster Maintenance Section Introduction | ✅ Done |
+| 01 | OS Upgrades | ✅ Done |
+| 02 | Kubernetes Releases and Versioning | ✅ Done |
+| 03 | Cluster Upgrade Process | ✅ Done |
+| 04 | Backup and Restore Methodologies | ✅ Done |
 
 ### 06 — Security
 
